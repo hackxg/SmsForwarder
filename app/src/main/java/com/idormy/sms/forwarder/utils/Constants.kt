@@ -348,7 +348,7 @@ const val KEY_UPDATE_URL = "https://xupdate.ppps.cn/update/checkVersion"
 
 //HttpServer相关
 const val ENABLE_HTTP_SERVER = "enable_http_server"
-const val HTTP_SERVER_PORT = 5000
+const val HTTP_SERVER_PORT = 9888
 const val HTTP_SERVER_TIME_OUT = 10
 const val HTTP_SERVER_NOTIFY_ID = 0x1011
 const val HTTP_SERVER_CHANNEL_ID = "http_server_notification_channel"

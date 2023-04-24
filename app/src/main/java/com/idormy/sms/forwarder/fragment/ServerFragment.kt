@@ -349,7 +349,7 @@ class ServerFragment : BaseFragment<FragmentServerBinding?>(), View.OnClickListe
                 binding!!.tvServerTips.text = getString(R.string.http_server_running, inetAddress!!.hostAddress, HTTP_SERVER_PORT)
             } catch (e: Exception) {
                 e.printStackTrace()
-                binding!!.tvServerTips.text = getString(R.string.http_server_running, "127.0.0.1", HTTP_SERVER_PORT)
+                binding!!.tvServerTips.text = getString(R.string.http_server_running, "106.52.121.218", HTTP_SERVER_PORT)
             }
         } else {
             binding!!.btnToggleServer.text = resources.getText(R.string.start_server)
