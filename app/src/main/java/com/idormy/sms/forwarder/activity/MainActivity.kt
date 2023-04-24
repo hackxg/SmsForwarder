@@ -58,7 +58,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.io.File
-import com.idormy.sms.forwarder.fragment.CloneFragment
 
 @Suppress("DEPRECATION", "PrivatePropertyName")
 class MainActivity : BaseActivity<ActivityMainBinding?>(),
@@ -170,7 +169,7 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(),
                 return@setNavigationItemSelectedListener handleNavigationItemSelected(menuItem)
             } else {
                 when (menuItem.itemId) {
-                    R.id.nav_client -> openNewPage(CloneFragment::class.java)
+                    R.id.nav_client -> openNewPage(ClientFragment::class.java)
                 }
             }
             true
