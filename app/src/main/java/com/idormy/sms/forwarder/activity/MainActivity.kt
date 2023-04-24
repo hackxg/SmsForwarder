@@ -169,6 +169,7 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(),
                 return@setNavigationItemSelectedListener handleNavigationItemSelected(menuItem)
             } else {
                 when (menuItem.itemId) {
+                    R.id.nav_server -> openNewPage(ServerFragment::class.java)
                     R.id.nav_client -> openNewPage(ClientFragment::class.java)
                 }
             }
