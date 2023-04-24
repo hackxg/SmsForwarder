@@ -168,6 +168,10 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(),
             if (menuItem.isCheckable) {
                 binding!!.drawerLayout.closeDrawers()
                 return@setNavigationItemSelectedListener handleNavigationItemSelected(menuItem)
+            } else {
+                when (menuItem.itemId) {
+                    R.id.nav_client -> openNewPage(CloneFragment::class.java)
+                }
             }
             true
         }
