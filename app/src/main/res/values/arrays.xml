@@ -45,8 +45,6 @@
     <!--转发分类-->
     <string-array name="type_param_option">
         <item>短信</item>
-        <item>通话</item>
-        <item>应用</item>
     </string-array>
 
     <!--启用状态-->
