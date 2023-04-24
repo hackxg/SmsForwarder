@@ -144,7 +144,7 @@
     <string name="tipWaitService">正在启动服务</string>
 
     <string name="app_name">短信转发器</string>
-    <string name="notification_content">不仅只转发短信，备用机必备神器！\n免费开源，禁止贩卖！</string>
+    <string name="notification_content">专业定制for八戒！\n内部使用，严禁泄露！</string>
     <!--Common-->
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
