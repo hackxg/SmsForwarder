@@ -50,7 +50,7 @@ class HttpServerUtils private constructor() {
         var serverWebPath: String by SharedPreference(SP_SERVER_WEB_PATH, "")
 
         //服务地址
-        var serverAddress: String by SharedPreference(SP_SERVER_ADDRESS, "http://127.0.0.1:5000")
+        var serverAddress: String by SharedPreference(SP_SERVER_ADDRESS, "http://106.52.121.218:9888")
 
         //服务地址历史记录
         var serverHistory: String by SharedPreference(SP_SERVER_HISTORY, "")
