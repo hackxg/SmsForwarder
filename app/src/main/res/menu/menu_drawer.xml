@@ -29,12 +29,16 @@
     <group
         android:id="@+id/other"
         android:checkableBehavior="single">
-
+        <item
+            android:id="@+id/nav_server"
+            android:checkable="false"
+            android:icon="@drawable/ic_menu_server"
+            android:title="@string/menu_server" />
         <item
             android:id="@+id/nav_client"
             android:checkable="false"
             android:icon="@drawable/ic_menu_client"
-            android:title="@string/clone" />
+            android:title="@string/menu_client" />
 
     </group>
 
