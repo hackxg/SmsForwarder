@@ -168,49 +168,6 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(),
             if (menuItem.isCheckable) {
                 binding!!.drawerLayout.closeDrawers()
                 return@setNavigationItemSelectedListener handleNavigationItemSelected(menuItem)
-            } else {
-                when (menuItem.itemId) {
-                    R.id.nav_server -> openNewPage(ServerFragment::class.java)
-                    R.id.nav_client -> openNewPage(ClientFragment::class.java)
-                    R.id.nav_frpc -> {
-                        if (!FileUtils.isFileExists(filesDir.absolutePath + "/libs/libgojni.so")) {
-                            MaterialDialog.Builder(this)
-                                .title(
-                                    String.format(
-                                        getString(R.string.frpclib_download_title),
-                                        FRPC_LIB_VERSION
-                                    )
-                                )
-                                .content(R.string.download_frpc_tips)
-                                .positiveText(R.string.lab_yes)
-                                .negativeText(R.string.lab_no)
-                                .onPositive { _: MaterialDialog?, _: DialogAction? ->
-                                    downloadFrpcLib()
-                                }
-                                .show()
-                            return@setNavigationItemSelectedListener false
-                        }
-
-                        if (FRPC_LIB_VERSION == Frpclib.getVersion()) {
-                            openNewPage(FrpcFragment::class.java)
-                        } else {
-                            MaterialDialog.Builder(this)
-                                .title(R.string.frpclib_version_mismatch)
-                                .content(R.string.download_frpc_tips)
-                                .positiveText(R.string.lab_yes)
-                                .negativeText(R.string.lab_no)
-                                .onPositive { _: MaterialDialog?, _: DialogAction? ->
-                                    downloadFrpcLib()
-                                }
-                                .show()
-                        }
-                    }
-                    R.id.nav_app_list -> openNewPage(AppListFragment::class.java)
-                    R.id.nav_logcat -> openNewPage(LogcatFragment::class.java)
-                    R.id.nav_help -> AgentWebActivity.goWeb(this, getString(R.string.url_help))
-                    R.id.nav_about -> openNewPage(AboutFragment::class.java)
-                    else -> XToastUtils.toast("Click:" + menuItem.title)
-                }
             }
             true
         }
