@@ -89,17 +89,10 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
 
         //转发短信广播
         switchEnableSms(binding!!.sbEnableSms)
-
         //过滤多久内重复消息
         binding!!.xsbDuplicateMessagesLimits.setDefaultValue(SettingUtils.duplicateMessagesLimits)
         binding!!.xsbDuplicateMessagesLimits.setOnSeekBarListener { _: XSeekBar?, newValue: Int ->
             SettingUtils.duplicateMessagesLimits = newValue
-        }
-
-        //自动删除N天前的转发记录
-        binding!!.xsbAutoCleanLogs.setDefaultValue(SettingUtils.autoCleanLogsDays)
-        binding!!.xsbAutoCleanLogs.setOnSeekBarListener { _: XSeekBar?, newValue: Int ->
-            SettingUtils.autoCleanLogsDays = newValue
         }
 
         //开机启动
@@ -143,7 +136,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
     }
 
     override fun initListeners() {
-        binding!!.btnSilentPeriod.setOnClickListener(this)
         binding!!.btnExtraDeviceMark.setOnClickListener(this)
         binding!!.btnExtraSim1.setOnClickListener(this)
         binding!!.btnExtraSim2.setOnClickListener(this)
@@ -163,19 +155,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
     override fun onClick(v: View) {
         val etSmsTemplate: EditText = binding!!.etSmsTemplate
         when (v.id) {
-            R.id.btn_silent_period -> {
-                OptionsPickerBuilder(context, OnOptionsSelectListener { _: View?, options1: Int, options2: Int, _: Int ->
-                    SettingUtils.silentPeriodStart = options1
-                    SettingUtils.silentPeriodEnd = options2
-                    val txt = mTimeOption[options1] + " ~ " + mTimeOption[options2]
-                    binding!!.tvSilentPeriod.text = txt
-                    XToastUtils.toast(txt)
-                    return@OnOptionsSelectListener false
-                }).setTitleText(getString(R.string.select_time_period)).setSelectOptions(SettingUtils.silentPeriodStart, SettingUtils.silentPeriodEnd).build<Any>().also {
-                    it.setNPicker(mTimeOption, mTimeOption)
-                    it.show()
-                }
-            }
             R.id.btn_extra_device_mark -> {
                 binding!!.etExtraDeviceMark.setText(PhoneUtils.getDeviceName())
                 return
@@ -398,48 +377,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
         }
     }
 
-    //转发应用通知
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    fun switchEnableAppNotify(
-        sbEnableAppNotify: SwitchButton, scbCancelAppNotify: SmoothCheckBox, scbNotUserPresent: SmoothCheckBox
-    ) {
-        val isEnable: Boolean = SettingUtils.enableAppNotify
-        sbEnableAppNotify.isChecked = isEnable
-
-        val layoutOptionalAction: LinearLayout = binding!!.layoutOptionalAction
-        layoutOptionalAction.visibility = if (isEnable) View.VISIBLE else View.GONE
-        //val layoutAppList: LinearLayout = binding!!.layoutAppList
-        //layoutAppList.visibility = if (isEnable) View.VISIBLE else View.GONE
-
-        sbEnableAppNotify.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            layoutOptionalAction.visibility = if (isChecked) View.VISIBLE else View.GONE
-            //layoutAppList.visibility = if (isChecked) View.VISIBLE else View.GONE
-            SettingUtils.enableAppNotify = isChecked
-            if (isChecked) {
-                //检查权限是否获取
-                XXPermissions.with(this).permission(Permission.BIND_NOTIFICATION_LISTENER_SERVICE).request(OnPermissionCallback { _, allGranted ->
-                    if (!allGranted) {
-                        SettingUtils.enableAppNotify = false
-                        sbEnableAppNotify.isChecked = false
-                        XToastUtils.error(R.string.tips_notification_listener)
-                        return@OnPermissionCallback
-                    }
-
-                    SettingUtils.enableAppNotify = true
-                    sbEnableAppNotify.isChecked = true
-                    CommonUtils.toggleNotificationListenerService(requireContext())
-                })
-            }
-        }
-        scbCancelAppNotify.isChecked = SettingUtils.enableCancelAppNotify
-        scbCancelAppNotify.setOnCheckedChangeListener { _: SmoothCheckBox, isChecked: Boolean ->
-            SettingUtils.enableCancelAppNotify = isChecked
-        }
-        scbNotUserPresent.isChecked = SettingUtils.enableNotUserPresent
-        scbNotUserPresent.setOnCheckedChangeListener { _: SmoothCheckBox, isChecked: Boolean ->
-            SettingUtils.enableNotUserPresent = isChecked
-        }
-    }
 
     //接受短信指令
     @SuppressLint("UseSwitchCompatOrMaterialCode")
@@ -605,16 +542,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
         }
     }
 
-    //定时推送电池状态
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    fun switchBatteryCron(sbBatteryCron: SwitchButton) {
-        sbBatteryCron.isChecked = SettingUtils.enableBatteryCron
-        binding!!.layoutBatteryCron.visibility = if (SettingUtils.enableBatteryCron) View.VISIBLE else View.GONE
-        sbBatteryCron.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            binding!!.layoutBatteryCron.visibility = if (isChecked) View.VISIBLE else View.GONE
-            SettingUtils.enableBatteryCron = isChecked
-        }
-    }
 
     //设置推送电池状态时机
     private fun editBatteryCronTiming(
@@ -1161,16 +1088,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
         if (appListSpinnerList.isEmpty()) return
 
         appListSpinnerAdapter = AppListSpinnerAdapter(appListSpinnerList).setIsFilterKey(true).setFilterColor("#EF5362").setBackgroundSelector(R.drawable.selector_custom_spinner_bg)
-        binding!!.spApp.setAdapter(appListSpinnerAdapter)
-        binding!!.spApp.setOnItemClickListener { _: AdapterView<*>, _: View, position: Int, _: Long ->
-            try {
-                val appInfo = appListSpinnerAdapter.getItemSource(position) as AppListAdapterItem
-                CommonUtils.insertOrReplaceText2Cursor(binding!!.etAppList, appInfo.packageName.toString() + "\n")
-            } catch (e: Exception) {
-                XToastUtils.error(e.message.toString())
-            }
-        }
-        binding!!.layoutSpApp.visibility = View.VISIBLE
 
     }
 
