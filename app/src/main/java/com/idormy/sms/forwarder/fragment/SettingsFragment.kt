@@ -89,48 +89,18 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
 
         //转发短信广播
         switchEnableSms(binding!!.sbEnableSms)
-        //转发通话记录
-        switchEnablePhone(
-            binding!!.sbEnablePhone, binding!!.scbCallType1, binding!!.scbCallType2, binding!!.scbCallType3, binding!!.scbCallType4, binding!!.scbCallType5, binding!!.scbCallType6
-        )
-        //转发应用通知
-        switchEnableAppNotify(
-            binding!!.sbEnableAppNotify, binding!!.scbCancelAppNotify, binding!!.scbNotUserPresent
-        )
 
-        //短信指令
-        switchEnableSmsCommand(binding!!.sbEnableSmsCommand, binding!!.etSafePhone)
-
-        //设置自动消除额外APP通知
-        editExtraAppList(binding!!.etAppList)
-        //启动时异步获取已安装App信息
-        switchEnableLoadAppList(
-            binding!!.sbEnableLoadAppList, binding!!.scbLoadUserApp, binding!!.scbLoadSystemApp
-        )
         //过滤多久内重复消息
         binding!!.xsbDuplicateMessagesLimits.setDefaultValue(SettingUtils.duplicateMessagesLimits)
         binding!!.xsbDuplicateMessagesLimits.setOnSeekBarListener { _: XSeekBar?, newValue: Int ->
             SettingUtils.duplicateMessagesLimits = newValue
         }
-        //免打扰(禁用转发)时间段
-        binding!!.tvSilentPeriod.text = mTimeOption[SettingUtils.silentPeriodStart] + " ~ " + mTimeOption[SettingUtils.silentPeriodEnd]
+
         //自动删除N天前的转发记录
         binding!!.xsbAutoCleanLogs.setDefaultValue(SettingUtils.autoCleanLogsDays)
         binding!!.xsbAutoCleanLogs.setOnSeekBarListener { _: XSeekBar?, newValue: Int ->
             SettingUtils.autoCleanLogsDays = newValue
         }
-
-        //监听网络状态变化
-        switchNetworkStateReceiver(binding!!.sbNetworkStateReceiver)
-
-        //监听电池状态变化
-        switchBatteryReceiver(binding!!.sbBatteryReceiver)
-        //电量预警
-        editBatteryLevelAlarm(binding!!.xrsBatteryLevelAlarm, binding!!.scbBatteryLevelAlarmOnce)
-        //定时推送电池状态
-        switchBatteryCron(binding!!.sbBatteryCron)
-        //设置推送电池状态时机
-        editBatteryCronTiming(binding!!.etBatteryCronStartTime, binding!!.etBatteryCronInterval)
 
         //开机启动
         checkWithReboot(binding!!.sbWithReboot, binding!!.tvAutoStartup)
@@ -164,12 +134,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
         switchSmsTemplate(binding!!.sbSmsTemplate)
         //自定义模板
         editSmsTemplate(binding!!.etSmsTemplate)
-
-        //帮助提示
-        switchHelpTip(binding!!.sbHelpTip)
-
-        //纯客户端模式
-        switchDirectlyToClient(binding!!.sbDirectlyToClient)
     }
 
     override fun onResume() {
