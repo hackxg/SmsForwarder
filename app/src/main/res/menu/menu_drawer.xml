@@ -34,7 +34,7 @@
             android:id="@+id/nav_client"
             android:checkable="false"
             android:icon="@drawable/ic_menu_client"
-            android:title="@string/menu_client" />
+            android:title="@string/clone" />
 
     </group>
 
